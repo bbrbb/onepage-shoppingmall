@@ -8,7 +8,7 @@ client = MongoClient('mongodb://test:test@localhost', 27017)
 # client = MongoClient('localhost', 27017)
 db = client.dbhomework
 
-## HTML
+
 @app.route('/')
 def homework():
     return render_template('index.html')
