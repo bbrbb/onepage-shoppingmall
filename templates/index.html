@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <title>onepage-shopping-mall</title>
+
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hi+Melody&display=swap" rel="stylesheet">
+
+    <style>
+
+    * {
+        font-family: 'Hi Melody', cursive;
+    }
+
+    .text-area {
+        font-size: 18px;
+        padding: 30px;
+    }
+
+    span {
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    img {
+        width: 535px;
+    }
+
+    .btn {
+        margin: auto;
+        width: 100px;
+        display: block;
+    }
+
+    .wrap {
+        width: 500px;
+        margin: auto;
+        padding : 30px 0px;
+    }
+    .rate {
+        color:blue;
+    }
+
+    .btn-order {
+        margin-bottom: 50px;
+    }
+</style>
+    <script>
+        $(document).ready(function () {
+            get_rate();
+            listing();
+        });
+
+        function listing() {
+            $.ajax({
+                type: "GET",
+                url: "/order",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        let orders = response['orders'];
+                        for (let i = 0; i < orders.length; i++) {
+                            let name = orders[i]['name'];
+                            let count = orders[i]['count'];
+                            let address = orders[i]['address'];
+                            let phone = orders[i]['phone'];
+
+                            let temp_html = `<tr>
+                                                <th scope="row">${name}</th>
+                                                <td>${count}</td>
+                                                <td>${address}</td>
+                                                <td>${phone}</td>
+                                            </tr>`
+                            $('#orders-box').append(temp_html)
+                        }
+                    }
+                }
+            })
+        }
+
+        function get_rate() {
+            $.ajax({
+                type: "GET",
+                url: "https://api.manana.kr/exchange/rate.json",
+                data: {},
+                success: function (response) {
+                    let now_rate = response[1]['rate'];
+                    $('#now-rate').text(now_rate);
+                }
+            })
+        }
+
+        function order() {
+            let name = $('#order-name').val();
+            let count = $('#order-count').val();
+            let address = $('#order-address').val();
+            let phone = $('#order-phone').val();
+
+            $.ajax({
+                type: "POST",
+                url: "/order",
+                data: {name_give: name, count_give: count, address_give: address, phone_give: phone},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert(response["msg"]);
+                        window.location.reload();
+                    }
+                }
+            })
+        }
+    </script>
+
+</head>
+
+
+
+
+
+
+<body>
+<div class="wrap">
+    <div>
+        <img src="https://i1.adis.ws/i/tom_ford/T1-CAFE-ROSE_OC_50ML_B?$large$&bg=rgb(255,255,255)"/>
+    </div>
+
+    <div class="text-area">
+        <h2> カフェローズパフューム <span>価格:270,000won</span></h2>
+        異国的だ。 魅惑的だ。「カフェローズ」はバラの成熟で魅惑的な香りに包まれ、ファムファタール的な魅力を存分に表出します。
+3つのバラのエッセンスがコーヒーの香りやエキゾチックな香りと踊り始めます。 最初の香りはきついが残り香が非常に良く、少量使用でもかなり良い結果が得られる製品。
+    <p class="rate">ドル ウォン レート :<span id="now-rate">1200.1</span></p>
+    </div>
+<div class="item-order">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">注文者名</span>
+            </div>
+            <input id="order-name" type="text" class="form-control" aria-label="Default"
+                   aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" >数量</label>
+            </div>
+            <select id="order-count" class="custom-select">
+                <option selected>-- 数量を選択してください --</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">住所</span>
+            </div>
+            <input id="order-address" type="text" class="form-control" aria-label="Default"
+                   aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">電話番号</span>
+            </div>
+            <input id="order-phone" type="text" class="form-control" aria-label="Default"
+                   aria-describedby="inputGroup-sizing-default">
+        </div>
+        <button type="button" onclick="order()" class="btn btn-primary btn-order">注文</button>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">お名前</th>
+            <th scope="col">数量</th>
+            <th scope="col">住所</th>
+            <th scope="col">電話番号</th>
+        </tr>
+        </thead>
+        <tbody id="orders-box">
+        </tbody>
+    </table>
+</div>
+</body>
+
+</html>
