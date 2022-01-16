@@ -1,5 +1,5 @@
 # onepage-shopping mall
-* demo : http://bora-murasaki.shop/
+* demo : http://bora-murasaki.shop/  
 ![main1](https://user-images.githubusercontent.com/87357349/149649591-d8378cbe-9031-4e6b-8556-3c24b89cba37.jpg)　　
 ## 機能
 * 為替レートAPIを利用して為替レートを表示　　
