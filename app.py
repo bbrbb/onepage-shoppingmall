@@ -8,12 +8,12 @@ client = MongoClient('mongodb://test:test@localhost', 27017)
 # client = MongoClient('localhost', 27017)
 db = client.dbhomework
 
-## HTML 화면 보여주기
+## HTML
 @app.route('/')
 def homework():
     return render_template('index.html')
 
-# 주문하기(POST) API
+# POST API
 @app.route('/order', methods=['POST'])
 def save_order():
     name_receive = request.form['name_give']
@@ -31,7 +31,7 @@ def save_order():
 
     return jsonify({'result': 'success', 'msg': '注文 完了!'})
 
-# 주문 목록보기(Read) API
+# Read API
 @app.route('/order', methods=['GET'])
 def view_orders():
     orders = list(db.orders.find({}, {'_id': False}))
